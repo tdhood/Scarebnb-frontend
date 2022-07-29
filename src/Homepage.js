@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import userContext from "./userContext";
 import React from "react";
 import ShareBnBApi from "./api";
+import ListingCard from "./ListingCard";
 
 /**Shows homepage
  *
