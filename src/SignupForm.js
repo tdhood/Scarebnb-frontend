@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./SignUpForm.css";
+// import "./SignUpForm.css";
 
 
 const DEFAULT_DATA = {

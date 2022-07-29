@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import UserContext from "./UserContext";
 
 
 
@@ -28,7 +29,7 @@ const DEFAULT_DATA = {
 
 
 function ListingForm({ create }) {
-  const { currUser } = useContext(userContext)
+  const { currUser } = useContext(UserContext)
   const [formData, setFormData] = useState(DEFAULT_DATA);
   const [errorMessages, setErrorMessages] = useState(null);
 
@@ -109,6 +110,7 @@ function ListingForm({ create }) {
           onChange={handleChange}
           value={formData.files}
           aria-label="Image file"
+          type="file"
         />
       </div>
       <div className="mb-2 col-md-7">

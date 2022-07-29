@@ -39,7 +39,7 @@ class ShareBnBApi {
     /** Get listings */
 
     static async getListings() {
-        let res = await this.request();
+        let res = await this.request('');
         return res.listings;
     }
 
