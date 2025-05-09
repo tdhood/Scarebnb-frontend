@@ -10,7 +10,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:5000";
  *
  */
 
-class ShareBnBApi {
+class ScareBnBApi {
     
     static token = '';
 
@@ -18,17 +18,18 @@ class ShareBnBApi {
         console.debug("API Call:", endpoint, data, method);
     
         const url = `${BASE_URL}/${endpoint}`;
-        const headers = { Authorization: `Bearer ${ShareBnBApi.token}` };
+        const headers = { AuthToken: `${ScareBnBApi.token}` };
         const params = (method === "get")
           ? data
           : {};
     
         try {
-          return (await axios({ url, method, data, params, headers })).data;
+          return (await axios({ url, method, data, params, headers, withCredentials: true})).data;
         } catch (err) {
-          console.error("API Error:", err.response);
-          let message = err.response.data.error.message;
-          throw Array.isArray(message) ? message : [message];
+            console.log("unobstructed error message", err)
+            console.error("API Error:", err.response);
+            let message = err.response.data.error.message;
+            throw Array.isArray(message) ? message : [message];
         }
     }
 
@@ -37,9 +38,15 @@ class ShareBnBApi {
 // LISTING ROUTES
 
     /** Get listings */
+    static async getListingsForGuest() {
+        console.debug("Token being sent:", ScareBnBApi.token);
+        console.log("getListingsForGuest")
+        let res = await this.request(`guest/listings`);
+        return res.listings;
+    }
 
-    static async getListings() {
-        let res = await this.request('');
+    static async getListings(user_id) {
+        let res = await this.request(`user/${user_id}/favorites`);
         return res.listings;
     }
 
@@ -66,7 +73,7 @@ class ShareBnBApi {
     static async signup(data) {
         let res = await this.request(`signup`, data, "post");
         this.token = res.token
-        return res.user;
+        return res;
     }
 
     /** User login */
@@ -74,8 +81,19 @@ class ShareBnBApi {
     static async login(data) {
         let res = await this.request(`login`, data, "post");
         this.token = res.token
-        return res.user;
+        return res;
     }
+
+    /** User is Guest */
+    static async is_guest() {
+        console.log("is_guest")
+        let res = await this.request(`guest`, {} ,"get");
+        this.token = res.token
+        console.log('token?????', this.token)
+        return res;
+    }
+
+
 }
 
-export default ShareBnBApi;
+export default ScareBnBApi;

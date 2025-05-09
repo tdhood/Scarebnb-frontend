@@ -2,11 +2,12 @@
 import './App.css';
 import UserContext from "./UserContext";
 import decode from "jwt-decode";
-import ShareBnBApi from './api';
+import ScareBnBApi from './api';
 import { useEffect, useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Navigation from './Navigation';
 import RouteList from './RouteList';
+import Homepage from './Homepage';
 
 /** App - wrapper
  * 
@@ -23,33 +24,39 @@ function App() {
     data: null,
     infoLoaded: false
   });
-  const [token, setToken] = useState(ShareBnBApi.token)
+  const [token, setToken] = useState(ScareBnBApi.token)
 
   async function login(loginData) {
-    let response = await ShareBnBApi.login(loginData)
+    let response = await ScareBnBApi.login(loginData)
     setToken(response.token)
     setCurrUser({data: response.user, infoLoaded: true});
-
   }
 
   async function signup(signupData) {
-    let response = await ShareBnBApi.signup(signupData)
+    let response = await ScareBnBApi.signup(signupData)
     setToken(response.token)
     setCurrUser({data: response.user, infoLoaded: true})
   }
 
   async function create(listingData) {
-    let response = await ShareBnBApi.createListing(listingData)
-    return response.listing
+    let response = await ScareBnBApi.createListing(listingData)
+    return response.listings
   }
 
+  //  function getGuestToken() {
+  //   const response = await ScareBnBApi.is_guest();
+  //   setToken(response.token)
+  //   ScareBnBApi.token = response.token;
+  //   setCurrUser({data: response.user, infoLoaded: true})
+  // }
   
   return (
     <div className="App">
     <UserContext.Provider value={{ currUser, token }}>
       <BrowserRouter>
       <Navigation />
-      <RouteList login={login} signup={signup} create={create} />
+      <Homepage />
+      <RouteList login={login} signup={signup} create={create}/>
       </BrowserRouter>
      </UserContext.Provider>
     </div>
